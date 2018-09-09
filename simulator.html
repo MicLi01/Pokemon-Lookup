@@ -1,0 +1,221 @@
+<!DOCTYPE HTML><!--Michael Li-->
+<html>
+	<head>
+		<title></title>
+	<script>
+		opponenthp = 300;
+		playerhp = 300;
+		tackleDmg = 40;
+		quickDmg = 40;
+		thunderDmg = 60;
+		rockslideDmg = 55;
+		oppSpeed = 50;
+		playerDef = 40;
+		playerSpeed = 45;
+		playerLevel = 100;
+		oppLevel = 100;
+		playerStatus = "";
+		xCoord = 100;
+		yCoord = 100;
+		
+		function chooseAttack(attack)
+		{
+			if(playerhp == 0)
+			{
+				return;
+			}
+			choice = attack;
+			if(choice == "tackle")
+			{
+				opponenthp = opponenthp-tackleDmg;
+			}
+			
+			if(choice == "quickAtk")
+			{
+				opponenthp = opponenthp - quickDmg;
+			}
+			
+			if(choice == "thunder")
+			{
+				opponenthp = opponenthp - thunderDmg;
+			}
+			
+			if(choice == "rockSlide")
+			{
+				opponenthp = opponenthp - rockslideDmg;
+			}
+			if(opponenthp <= 0)
+			{
+				opponenthp = 0;
+			}
+			display();
+			oppTurn();
+		}
+		
+		function oppTurn()
+		{
+			if(opponenthp ==0)
+			{
+				return;
+			}
+			oppChoice = parseInt(Math.random()*4)+1;
+			atkName = "";
+			if(oppChoice == 1)
+			{
+				atkName = "bubblebeam";
+				playerhp = playerhp-60;
+			}
+			if(oppChoice == 2)
+			{
+				atkName = "agility";
+				oppSpeed = oppSpeed +10;
+			}
+			if(oppChoice == 3)
+			{
+				atkName = "surf";
+				playerhp = playerhp-95;
+			}
+			if(oppChoice == 4)
+			{
+				atkName = "tailwhip";
+				playerDef = playerDef - 5;
+			}
+			if(playerhp <= 0)
+			{
+				playerhp = 0;
+			}
+			display();
+		}
+		
+		function useItem(item)
+		{
+			chooseItem = item;
+			if (chooseItem == "restore")
+			{
+				playerhp = 300; 
+			}
+			if(chooseItem == "revive")
+			{
+				playerhp = 150;
+			}
+			if(chooseItem == "antidote"&&playerStatus == "poison")
+			{
+				playerStatus = "";
+			}
+		}
+		
+		function showItems()
+		{
+			playerBag.style.display = "none";
+			playerItems.style.display = "block";
+		}
+		
+		function checkSpeed(cAttack)
+		{
+			chooseSkill = cAttack;
+			if(oppSpeed>playerSpeed)
+			{
+				oppTurn();
+				chooseAttack(chooseSkill);
+			}
+			if(playerSpeed>oppSpeed)
+			{
+				chooseAttack(chooseSkill);
+				oppTurn();
+			}
+			if(playerSpeed == oppSpeed)
+			{
+				atkFirst = parseInt(Math.random()*2)+1;
+				if(atkFirst == 1)
+				{
+					chooseAttack(chooseSkill);
+					oppTurn();
+				}
+				if(atkFirst == 2)
+				{
+					oppTurn();
+					chooseAttack(chooseSkill);
+				}
+			}
+		}
+		
+		function display()
+		{
+			currentHp.innerHTML = "HP" + playerhp;
+			compHp.innerHTML = "HP" + opponenthp;
+		}
+	</script>
+	<style>
+	body{background-color:#87CEFA;}
+	
+	div#title{text-align:center;}
+	
+	span#bar{border-style:outset;background-color:#191970;}
+	
+	span#pokemon,span#skill,span#item,span#simulation{margin-left:5%;color:#F0FFFF;}
+	
+	span#simulation{margin-right:5%;}
+	
+	div#link{text-align:center;}
+	
+	div#skillchoice,div#health{text-align:center;margin-top:1%;}
+	
+	a{color:#F0FFFF;text-decoration: none;}
+	
+	a:hover{color:#00FFFF;}
+	
+	div.ctrimg{text-align:center;}
+	
+	div.playerhealthbar{width:100px;height:5px;background-color:red;}
+	</style>
+	</head>
+	<body>
+	<div id = "title"><a href = "homepage.html">
+		<img src = "pokemonsmall.jpg"/></a>
+	</div>
+	<div id = "link">
+		<span id = "bar">
+			<span id = "pokemon"><a href  = "list.html"> Pokemon</a></span>
+			<span id = "skill"><a href  = "skill.html"> Skill List</a> </span>
+			<span id = "item"><a href  = "item.html"> Item List</a></span>
+			<span id = "simulation"><a href  = "simulator.html">Simulation</a></span>
+		</span>
+	</div>
+	<div>
+	<div class = "ctrimg"><img src = "field.png"/></div>
+	<img src = "marill.png"/>
+	<img src = "squirtle.png"/>
+	</div>
+	<div id = "battle">
+		<div id = "health">
+			<div class = "opphealthbar"> </div>
+			<div id = "opphp"></div>
+			<div class = "playerhealthbar"> </div>
+			<div id = "playhp"></div>
+		</div>
+	<div id = "skillchoice">
+		<button id = "skillone"onclick = "checkSpeed('tackle');">Tackle</button>
+		<button id = "skilltwo"onclick = "checkSpeed('quickAtk');">Quick Attack</button>
+		<button id = "skillthree"onclick = "checkSpeed('thunder');">Thunder</button>
+		<button id = "skillfour"onclick = "checkSpeed('rockSlide');">Rock Slide</button>
+	</div>
+	<div class = "ctrimg" id = "bag">
+		<button onclick = "showItems();"> Bag </button>
+	</div>
+		<div id = "items">
+			<button onclick = "useItem('restore');"> Full Restore </button>
+			<button onclick = "useItem('revive');"> Revive </button>
+			<button onclick = "useItem('antidote');"> Antidote </button>
+		</div>
+	</div>
+	
+	<script>
+	currentHp = document.getElementById("playhp");
+	compHp = document.getElementById("opphp");
+	playerItems = document.getElementById("items");
+	playerItems.style.display = "none";
+	playerBag = document.getElementById("bag");
+	display();
+	</script>
+	</body>
+</html>
