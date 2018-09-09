@@ -40,13 +40,12 @@
 	</div>
 	<input id ="info" type="text" placeholder="Search">
 	<button onclick="display()"> Search </button>
-	<img id="imgdisp" src="">
+	<div id ="name"> </div>
 	<script>
 	function display()
 		{
 			data = document.getElementById("info").value;
-			fname = "skill/"+data + ".jpg";
-			document.getElementById("imgdisp").src = fname;
+			document.getElementById("name").innerHTML = data;
 		}
 	</script>
 	</body>
